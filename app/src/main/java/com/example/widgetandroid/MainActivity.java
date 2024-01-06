@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     private Button confirmBtn;
     private final int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     List<CurrencyDetails> currencyDetailsList = new ArrayList<>();
-    ImageView ImageTestId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +40,12 @@ public class MainActivity extends AppCompatActivity {
 
         editTextButton = findViewById(R.id.edit_text_button);
         confirmBtn = findViewById(R.id.confirmBtn);
-        ImageTestId = findViewById(R.id.ImageTestId);
+
 
         currencyDetailsList.add(new CurrencyDetails("Russia", "https://e7.pngegg.com/pngimages/591/293/png-clipart-flag-of-russia-russia-blue-flag-thumbnail.png", "300"));
         currencyDetailsList.add(new CurrencyDetails("Bangladesh", "https://p1.hiclipart.com/preview/902/904/1022/flag-icons-asia-bangladesh-png-icon.jpg", "200"));
         currencyDetailsList.add(new CurrencyDetails("America", "https://image.similarpng.com/very-thumbnail/2020/06/Circle-glossy-american-flag-vector-transparent-PNG.png", "200"));
-        currencyDetailsList.add(new CurrencyDetails("India", "https://e7.pngegg.com/pngimages/591/293/png-clipart-flag-of-russia-russia-blue-flag-thumbnail.png", "200"));
+        currencyDetailsList.add(new CurrencyDetails("India", "https://e7.pngegg.com/pngimages/591/293/png-clipart-flag-of-russia-russia-blue-flag-thumbnail.png", "300"));
 
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,15 +65,15 @@ public class MainActivity extends AppCompatActivity {
 
     }*/
 
+    int count  = 0;
     private void confirmButtonClicked() {
         // Save button text to SharedPreferences
-
-        ImageTestId.setImageURI(Uri.parse(currencyDetailsList.get(0).getCountryURi()));
         String buttonText = editTextButton.getText().toString();
         SharedPreferences prefs = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.clear();
         editor.putString("Data", new Gson().toJson(currencyDetailsList));
+        editor.putString("string", buttonText);
         editor.apply();
 
         // Update the widget using the AppWidgetManager

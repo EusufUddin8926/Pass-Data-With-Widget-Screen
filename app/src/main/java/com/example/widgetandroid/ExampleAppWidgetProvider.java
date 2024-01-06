@@ -7,8 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import androidx.annotation.NonNull;
@@ -18,10 +17,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
 
@@ -42,18 +41,21 @@ public class ExampleAppWidgetProvider extends AppWidgetProvider {
         // Retrieve data from SharedPreferences
         SharedPreferences preferences = context.getSharedPreferences("prefs", Context.MODE_PRIVATE);
         String dataFromActivity = preferences.getString("Data", "");
+        String string = preferences.getString("string", "");
 
         Type typeUserInfo = new TypeToken<List<CurrencyDetails>>() {}.getType();
         List<CurrencyDetails> currencyDetailsList = new Gson().fromJson(dataFromActivity, typeUserInfo);
 
+
+        Log.d("SIGN_500", new GsonBuilder().setPrettyPrinting().create().toJson(currencyDetailsList));
         // Your widget update logic here
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.example_widget);
-        views.setCharSequence(R.id.refreshBtn, "setText", currencyDetailsList.get(0).getCountryName());
-        /*Bitmap bitmap = getBitmapFromUri(context, Uri.parse(currencyDetailsList.get(0).getCountryURi()));
-        views.setImageViewBitmap(R.id.fromCountryImgView, bitmap);*/
-
+        views.setCharSequence(R.id.refreshBtn, "setText",string);
+        setRemoteAdapter(context, views, currencyDetailsList);
         views.setCharSequence(R.id.fromCountryNameId, "setText", currencyDetailsList.get(0).getCountryName());
         views.setCharSequence(R.id.fromCountryAmountId, "setText", currencyDetailsList.get(0).getAmount());
+
+     //   AppWidgetManager.getInstance(context).notifyAppWidgetViewDataChanged(R.id.listItemId, appWidgetId);
 
         // Update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -93,18 +95,8 @@ public class ExampleAppWidgetProvider extends AppWidgetProvider {
         }
     }
 
-    private Bitmap getBitmapFromUri(Context context, Uri uri) {
-        try {
-            // Load the bitmap from the URI
-            InputStream inputStream = context.getContentResolver().openInputStream(uri);
-            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-            if (inputStream != null) {
-                inputStream.close();
-            }
-            return bitmap;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
+    private static void setRemoteAdapter(Context context, @NonNull final RemoteViews views, List<CurrencyDetails> currencyDetailsList) {
+        views.setRemoteAdapter(R.id.listItemId,
+                new Intent(context, WidgetService.class));
     }
 }

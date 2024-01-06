@@ -22,9 +22,6 @@
         android:text="Confirm" />
 
 
-    <ImageView
-        android:id="@+id/ImageTestId"
-        android:layout_width="100dp"
-        android:layout_height="100dp"/>
+
 
 </LinearLayout>
