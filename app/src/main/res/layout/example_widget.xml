@@ -39,13 +39,14 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
-                    android:id="@+id/russiaImgView"
+                    android:id="@+id/fromCountryImgView"
                     android:src="@drawable/russia"
                     android:layout_width="40dp"
                     android:layout_height="40dp"/>
 
                 <TextView
-                    android:text="Russia "
+                    android:id="@+id/fromCountryNameId"
+                    android:text=" "
                     android:textColor="@color/white"
                     android:textStyle="bold"
                     android:layout_marginLeft="8dp"
@@ -60,7 +61,8 @@
 
 
             <TextView
-                android:text="1600 "
+                android:id="@+id/fromCountryAmountId"
+                android:text=" "
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 android:paddingLeft="8dp"
